@@ -1,13 +1,85 @@
 package KongApi;
 
 use 5.006;
-use strict;
-use warnings;
+use Moo;
 
-require KongApi::Functions;
+require KongApi::UserAgent;
 require KongApi::Objects::API;
 require KongApi::Objects::Plugin;
 require KongApi::Objects::Consumer;
+
+
+our $VERSION = '0.01';
+
+has ua => (is => 'ro');
+
+sub BUILDARGS {
+	my ($class, %args) = @_;
+	$args{ua} = KongApi::UserAgent->new(host => $args{server} || 'http://localhost:8001/', timeout => $args{ua_timeout});
+	return \%args;
+}
+
+sub getApis {
+	shift->getCollection(apis => @_);
+}
+
+sub getPlugins {
+	shift->getCollection(plugins => @_);
+}
+
+sub getConsumers {
+	shift->getCollection(consumers => @_);
+}
+
+sub getCollection {
+	my ($self, $collection, %params) = (shift, shift, @_);
+	my $res = $self->ua->request(type => 'GET', path => $collection);
+	die "Error: Server returned status code: $res->{code}" unless $res->code == 200;
+	if ($collection eq "apis") {
+		return [map { KongApi::Objects::API->new(%$_) } @{$res->json->{data}}];
+	}
+	if ($collection eq "plugins") {
+		return [map { KongApi::Objects::Plugin->new(%$_) } @{$res->json->{data}}];
+	}
+	if ($collection eq "consumers") {
+		return [map { KongApi::Objects::Consumer->new(%$_) } @{$res->json->{data}}];
+	}
+}
+
+sub addPlugin {
+
+}
+
+sub addConsumer {
+	my ($self, %args) = (shift, @_);
+	return $self->ua->request(type => 'POST', path => 'consumers', data => \%args);
+}
+
+sub deleteConsumer {
+	my ($self, %args) = (shift, @_);
+	my $consumer = $args{id} || $args{username} || '';
+	return $self->ua->request(type => 'DELETE', path => "consumers/$consumer");
+}
+
+sub updateConsumer {
+	my ($self, %args) = (shift, @_);
+	my $consumer = $args{id} || $args{username} || '';
+	my $response = KongApi::Functions::patch(url => $self->server . 'consumers/'.$consumer => config => $args{config});
+	return $response->code, $response->json;
+}
+
+sub updateCreateConsumer {
+	my ($self, %args) = (shift, @_);
+	return $self->ua->request(type => 'PUT', path => 'consumers', data => \%args);
+}
+
+
+#  PRIVATE METHODS
+
+
+
+
+# DOCS
 
 =head1 NAME
 
@@ -19,84 +91,6 @@ Version 0.01
 
 =cut
 
-our $VERSION = '0.01';
-
-
-=head1 SYNOPSIS
-
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use KongApi;
-
-    my $foo = KongApi->new();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES/METHODS
-
-=head2 new
-
-=cut
-
-sub new {
-	my $class = shift;
-	my %args = @_;
-	my $object = {
-		server => exists $args{server} ? $args{server} : 'http://localhost:8001/',
-	};
-	return bless $object, $class;
-}
-
-=head2 getApis
-
-=cut
-
-sub getApis {
-	my $object = shift;
-	my $apis = [];
-	my $res = KongApi::Functions::get(url => $object->{server}.'apis/');
-	if ($res->code != 200) {
-		die "Error occured while obtaining APIs";
-	}
-	for my $api (@{$res->json->{data}}) {
-		push @$apis, KongApi::Objects::API->new(%$api);
-	}
-	return $apis;
-}
-
-sub getPlugins {
-	my $object = shift;
-	my $plugins = [];
-	my $res = KongApi::Functions::get(url => $object->{server}.'plugins/');
-	if ($res->code != 200) {
-		die "Error occured while obtaining Plugins";
-	}
-	for my $plugin (@{$res->json->{data}}) {
-		push @$plugins, KongApi::Objects::Plugin->new(%$plugin);
-	}
-	return $plugins;
-}
-
-sub getConsumers {
-	my $object = shift;
-	my $consumers = [];
-	my $res = KongApi::Functions::get(url => $object->{server}.'consumers/');
-	if ($res->code != 200) {
-		die "Error occured while obtaining Consumers";
-	}
-	for my $consumer (@{$res->json->{data}}) {
-		push @$consumers, KongApi::Objects::Consumer->new(%$consumer);
-	}
-	return $consumers;
-}
-
-
 =head1 AUTHOR
 
 Alexander Beloglazov, C<< <abelogla at buffalo.edu> >>
@@ -106,8 +100,6 @@ Alexander Beloglazov, C<< <abelogla at buffalo.edu> >>
 Please report any bugs or feature requests to C<bug-kongapi at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=KongApi>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
-
-
 
 
 =head1 SUPPORT
