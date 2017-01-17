@@ -1,6 +1,7 @@
 package KongApi::UserAgent;
 
 use Moo;
+use Carp qw(croak);
 use URI;
 use JSON::PP qw(encode_json decode_json);
 use LWP::UserAgent;
@@ -18,7 +19,9 @@ sub BUILDARGS {
 
 sub request {
     my ($self, %args) = @_;
+    croak 'Unspecified type of the request' unless defined $args{type};
     $self->host->path($args{path});
+    $self->host->query_form($args{querystring}) if exists $args{querystring};
     my $req = HTTP::Request->new($args{type}, $self->host->canonical);
     unless ($args{type} =~ m/GET|DELETE/i) {
         $req->header('Content-Type' => 'application/json');
@@ -26,7 +29,10 @@ sub request {
     }
     my $res = $self->ua->request($req);
     my $json = eval { decode_json($res->decoded_content || '{}') };
-    return KongApi::Response->new({code => $res->code, message => $res->message, json => $@ ? {} : $json});
+    return KongApi::Response->new({
+        code => $res->code, message => $res->message, data => $@ ? {} : $json,
+        is_success => (grep {$_ == $res->code} (204, 201, 200)) ? 1 : 0
+    });
 }
 
 1;

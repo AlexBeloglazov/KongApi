@@ -4,50 +4,18 @@ use 5.006;
 use Moo;
 
 require KongApi::UserAgent;
-require KongApi::Objects::API;
-require KongApi::Objects::Plugin;
-require KongApi::Objects::Consumer;
-
+require KongApi::Factory;
 
 our $VERSION = '0.01';
 
 has ua => (is => 'ro');
+has [qw(consumer plugin api)] => (is => 'ro');
 
 sub BUILDARGS {
 	my ($class, %args) = @_;
 	$args{ua} = KongApi::UserAgent->new(host => $args{server} || 'http://localhost:8001/', timeout => $args{ua_timeout});
+	$args{$_} = KongApi::Factory->build(type => $_, ua => $args{ua}) foreach (qw/consumer plugin api/);
 	return \%args;
-}
-
-sub getApis {
-	shift->getCollection(apis => @_);
-}
-
-sub getPlugins {
-	shift->getCollection(plugins => @_);
-}
-
-sub getConsumers {
-	shift->getCollection(consumers => @_);
-}
-
-sub getCollection {
-	my ($self, $collection, %params) = (shift, shift, @_);
-	my $res = $self->ua->request(type => 'GET', path => $collection);
-	die "Error: Server returned status code: $res->{code}" unless $res->code == 200;
-	if ($collection eq "apis") {
-		return [map { KongApi::Objects::API->new(%$_) } @{$res->json->{data}}];
-	}
-	if ($collection eq "plugins") {
-		return [map { KongApi::Objects::Plugin->new(%$_) } @{$res->json->{data}}];
-	}
-	if ($collection eq "consumers") {
-		return [map { KongApi::Objects::Consumer->new(%$_) } @{$res->json->{data}}];
-	}
-}
-
-sub addPlugin {
-
 }
 
 sub addConsumer {
