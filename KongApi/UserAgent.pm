@@ -29,17 +29,12 @@ sub request {
     }
     my $res = $self->ua->request($req);
     my $json = eval { decode_json($res->decoded_content || '{}') };
-    my $response = KongApi::Response->new({
+    return KongApi::Response->new({
         code => $res->code,
         message => $res->message,
         data => $@ ? {} : $json,
         is_success => (grep {$_ == $res->code} (200, 201, 204)) ? 1 : 0
     });
-    my $callback = ($response->is_success) ? $args{on_success} : $args{on_error};
-    if (defined $callback) {
-        (ref $callback eq 'CODE') ? $callback->($response->code) : confess 'Subroutine is expected';
-    }
-    return $response;
 }
 
 1;

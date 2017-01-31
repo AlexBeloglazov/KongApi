@@ -4,8 +4,6 @@ use Moo;
 use Carp qw(croak);
 use KongApi::Helpers;
 use KongApi::Response;
-use Data::Dumper;
-
 
 my $path = 'apis';
 
@@ -57,14 +55,15 @@ sub delete {
         path => "$path\/$nameOrId",
     );
     exec_callback($args{on_success}, $args{on_error}, $res);
-    return ($res->is_success) ? $self : 0;
+    return $res->is_success;
 }
 
 sub create_update {
     my ($self, %args) = (shift, @_);
-    my %req_body;
+    my (%req_body, $val);
     foreach (@attr) {
-        $req_body{$_} = $self->$_ if defined $self->$_;
+		$val = $args{$_} || $self->$_;
+        $req_body{$_} = $val if defined $val;
     }
     my $res = $self->ua->request(
         type => 'PUT',

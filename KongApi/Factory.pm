@@ -44,8 +44,7 @@ sub find {
 
 sub findOne {
     my ($self, %args) = (shift, @_);
-    my $target = $args{id} || $args{name} || $args{username};
-    croak "Required request parameter: id, name or username" unless $target;
+    my $target = $args{id} || $args{name} || $args{username} || croak "Required parameter: id, name or username";
     my $res = $self->ua->request(type => 'GET', path => lc $self->type."s\/$target");
     return KongApi::Response->new({
         code => $res->code,
