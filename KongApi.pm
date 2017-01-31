@@ -18,29 +18,6 @@ sub BUILDARGS {
 	return \%args;
 }
 
-sub addConsumer {
-	my ($self, %args) = (shift, @_);
-	return $self->ua->request(type => 'POST', path => 'consumers', data => \%args);
-}
-
-sub deleteConsumer {
-	my ($self, %args) = (shift, @_);
-	my $consumer = $args{id} || $args{username} || '';
-	return $self->ua->request(type => 'DELETE', path => "consumers/$consumer");
-}
-
-sub updateConsumer {
-	my ($self, %args) = (shift, @_);
-	my $consumer = $args{id} || $args{username} || '';
-	my $response = KongApi::Functions::patch(url => $self->server . 'consumers/'.$consumer => config => $args{config});
-	return $response->code, $response->json;
-}
-
-sub updateCreateConsumer {
-	my ($self, %args) = (shift, @_);
-	return $self->ua->request(type => 'PUT', path => 'consumers', data => \%args);
-}
-
 
 #  PRIVATE METHODS
 

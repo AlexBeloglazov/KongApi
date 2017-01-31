@@ -77,4 +77,8 @@ sub create_update {
     return ($res->is_success) ? $self : 0;
 }
 
+sub add_plugin {
+    
+}
+
 1;
