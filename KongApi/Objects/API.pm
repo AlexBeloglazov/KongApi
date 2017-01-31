@@ -17,8 +17,4 @@ around $_ => sub {
 } foreach (attr);
 
 
-sub add_plugin {
-    
-}
-
 1;

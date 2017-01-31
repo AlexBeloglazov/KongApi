@@ -1,14 +1,20 @@
 package KongApi::Objects::Plugin;
 
 use Moo;
+with map {'KongApi::Roles::'.$_} qw(Addable);
 
-my $path = 'plugins';
+use constant path => 'plugins';
+use constant attr => qw(name created_at config enabled consumer_id api_id api_name id);
 
-my @attr = qw(name created_at id enabled api_id consumer_id config);
 
-has [ @attr ] => (is => 'rw');
+has [ attr ] => (is => 'rw');
 has 'ua' => (is => 'ro');
 
+around $_ => sub {
+    my ($orig, $self, $val) = @_;
+    $orig->($self, $val);
+    return $self;
+} foreach (attr);
 
 
 1;
