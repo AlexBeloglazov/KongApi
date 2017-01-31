@@ -1,15 +1,14 @@
 package KongApi::UserAgent;
 
 use Moo;
-use Carp qw(croak confess);
+use Carp qw(croak);
 use URI;
 use JSON::PP qw(encode_json decode_json);
 use LWP::UserAgent;
-use Data::Dumper;
 use KongApi::Response;
 
 has ua => (is => 'ro');
-has host => (is => 'ro', coerce => sub {URI->new($_[0])}, isa => sub {die "URL must be absolute" unless $_[0]->scheme});
+has server => (is => 'ro', coerce => sub {URI->new($_[0])}, isa => sub {die "URL must be absolute" unless $_[0]->scheme});
 
 sub BUILDARGS {
     my ($class, %args) = @_;
@@ -20,9 +19,9 @@ sub BUILDARGS {
 sub request {
     my ($self, %args) = @_;
     croak 'Unspecified type of the request' unless defined $args{type};
-    $self->host->path($args{path});
-    $self->host->query_form($args{querystring}) if exists $args{querystring};
-    my $req = HTTP::Request->new($args{type}, $self->host->canonical);
+    $self->server->path($args{path});
+    $self->server->query_form($args{querystring}) if exists $args{querystring};
+    my $req = HTTP::Request->new($args{type}, $self->server->canonical);
     unless ($args{type} =~ m/GET|DELETE/i) {
         $req->header('Content-Type' => 'application/json');
         $req->content(encode_json $args{data});

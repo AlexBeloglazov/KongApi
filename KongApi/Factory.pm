@@ -1,11 +1,10 @@
 package KongApi::Factory;
 
 use Moo;
-use Data::Dumper;
-use KongApi::Response;
-require KongApi::Objects::API;
-require KongApi::Objects::Plugin;
-require KongApi::Objects::Consumer;
+use KongApi::Objects::API;
+use KongApi::Objects::Plugin;
+use KongApi::Objects::Consumer;
+use KongApi::Helpers;
 use Carp qw(croak);
 
 has [qw (type ua)] => (is => 'ro');
@@ -29,29 +28,28 @@ sub build {
 
 sub find {
     my ($self, %args) = (shift, @_);
+    my ($on_success, $on_error) = (delete $args{on_success}, delete $args{on_error});
     my $res = $self->ua->request(
         type => 'GET',
         path => lc $self->type.'s',
         querystring => \%args
     );
-    return KongApi::Response->new({
-        code => $res->code,
-        message => $res->message,
-        is_success => $res->is_success,
-        data => [map { ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %$_) } @{$res->data->{data}}]
-    });
+    my $data = [map { ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %$_) } @{$res->data->{data}}];
+    exec_callback($on_success, $on_error, $res, $data);
+    return $data;
 }
 
 sub findOne {
     my ($self, %args) = (shift, @_);
     my $target = $args{id} || $args{name} || $args{username} || croak "Required parameter: id, name or username";
-    my $res = $self->ua->request(type => 'GET', path => lc $self->type."s\/$target");
-    return KongApi::Response->new({
-        code => $res->code,
-        message => $res->message,
-        is_success => $res->is_success,
-        data => $res->is_success ? ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %{$res->data}) : undef
-    });
+    my ($on_success, $on_error) = (delete $args{on_success}, delete $args{on_error});
+    my $res = $self->ua->request(
+        type => 'GET',
+        path => lc $self->type."s\/$target"
+    );
+    my $data = ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %{$res->data});
+    exec_callback($on_success, $on_error, $res, $data);
+    return ($res->is_success) ? $data : undef;
 }
 
 1;

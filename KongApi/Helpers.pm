@@ -6,10 +6,14 @@ use parent ("Exporter");
 our @EXPORT = ("exec_callback", "args_check");
 
 sub exec_callback {
-    my ($on_success, $on_error, $res) = (shift, shift, shift);
+    my ($on_success, $on_error, $res, $object) = @_;
     my $callback = ($res->is_success) ? $on_success : $on_error;
-    if (defined $callback) {
-        (ref $callback eq 'CODE') ? $callback->($res->code) : confess 'Subroutine is expected';
+    return unless $callback;
+    if ($res->is_success) {
+        (ref $callback eq 'CODE') ? $callback->($object, $res) : confess 'CODE is expected';
+    }
+    else {
+        (ref $callback eq 'CODE') ? $callback->($res) : confess 'CODE is expected';
     }
 }
 

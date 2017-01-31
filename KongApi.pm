@@ -1,19 +1,17 @@
 package KongApi;
 
-use 5.006;
 use Moo;
+use KongApi::UserAgent;
+use KongApi::Factory;
 
-require KongApi::UserAgent;
-require KongApi::Factory;
-
-our $VERSION = '0.01';
+our $VERSION = '0.1';
 
 has ua => (is => 'ro');
 has [qw(consumer plugin api)] => (is => 'ro');
 
 sub BUILDARGS {
 	my ($class, %args) = @_;
-	$args{ua} = KongApi::UserAgent->new(host => $args{server} || 'http://localhost:8001/', timeout => $args{ua_timeout});
+	$args{ua} = KongApi::UserAgent->new(server => $args{server} || 'http://localhost:8001/', timeout => $args{ua_timeout});
 	$args{$_} = KongApi::Factory->build(type => $_, ua => $args{ua}) foreach (qw/consumer plugin api/);
 	return \%args;
 }
