@@ -18,7 +18,7 @@ around 'new' => sub {
         return $orig->($class, %args);
     }
     croak 'Factory must be built first' unless ref $class;
-    return ('KongApi::Objects::'.$class->type)->new(ua => $class->ua);
+    return ('KongApi::Objects::'.$class->type)->new(ua => $class->ua, %args);
 };
 
 sub build {
@@ -29,9 +29,15 @@ sub build {
 
 sub find {
     my ($self, %args) = (shift, @_);
-    my $res = $self->ua->request(type => 'GET', path => lc $self->type.'s', querystring => \%args);
+    my $res = $self->ua->request(
+        type => 'GET',
+        path => lc $self->type.'s',
+        querystring => \%args
+    );
     return KongApi::Response->new({
-        code => $res->code, message => $res->message, is_success => $res->is_success,
+        code => $res->code,
+        message => $res->message,
+        is_success => $res->is_success,
         data => [map { ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %$_) } @{$res->data->{data}}]
     });
 }
@@ -42,8 +48,10 @@ sub findOne {
     croak "Required request parameter: id, name or username" unless $target;
     my $res = $self->ua->request(type => 'GET', path => lc $self->type."s\/$target");
     return KongApi::Response->new({
-        code => $res->code, message => $res->message, is_success => $res->is_success,
-        data => ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %{$res->data})
+        code => $res->code,
+        message => $res->message,
+        is_success => $res->is_success,
+        data => $res->is_success ? ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %{$res->data}) : undef
     });
 }
 

@@ -16,7 +16,18 @@ my $k = KongApi->new(server => 'http://192.168.0.2:8001', ua_timeout => 5);
 # print Dumper($k->addConsumer(username => 'noxik1' => custom_id => "124"));
 # print Dumper($k->deleteConsumer(username => 'noxik2'));
 
-print Dumper $k->api->findOne(name => 'mockbin')->data;
+print Dumper $k->api->new(name => 'mockbin2', upstream_url => 'http://mockbin.com/', request_host => 'mockbin.com')->add;
 
-# print Dumper($k->updateConsumer(username => 'noxik1', config => {username => 'nox'}));
-# print Dumper($k->updateCreateConsumer(id => 'fcf8f02c-3734-4403-8e53-6ddd8f8fc889', username => 'noxik29'));
+
+# my $api = $k->api->findOne(id => '514b39d6-ab77-45fa-acc2-bbe327eb5b91')->data;
+# $api->name('mockbin');
+
+# print Dumper $api->delete(on_success => sub {
+#     say "success";
+# });
+#
+# print Dumper $api->delete(on_error => sub {
+#     say 'error code: ' . shift;
+# });
+
+# $api->update(name => '', on_success => sub {})
