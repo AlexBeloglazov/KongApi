@@ -1,6 +1,7 @@
 package KongApi::Objects::Consumer;
 
 use Moo;
+# with 'KongApi::Roles::Addable';
 use Carp qw(croak);
 use KongApi::Helpers;
 use KongApi::Response;

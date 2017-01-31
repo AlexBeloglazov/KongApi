@@ -5,7 +5,7 @@ use Carp qw(croak);
 use KongApi::Helpers;
 use KongApi::Response;
 
-my $path = 'apis';
+our $path = 'apis';
 
 my @attr = qw(name request_host request_path strip_request_path preserve_host upstream_url created_at id);
 
