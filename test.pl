@@ -20,7 +20,7 @@ foreach (@{$k->consumer->find}) {
 
 # print Dumper $k->plugin->findOne(id => '2ea2465b-744e-4a73-9918-98b687aafa78')->delete(on_error => sub {print Dumper shift->data});
 
-# print Dumper $k->consumer->new(username => 'Alexander')->add;
+print Dumper $k->consumer->new(username => 'Alexander')->add;
 
 # print "${\($k->api->type)}";
 

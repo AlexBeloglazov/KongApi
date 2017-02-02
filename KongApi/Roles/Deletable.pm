@@ -16,7 +16,7 @@ sub delete {
     }
     my $res = $self->ua->request(
         type => 'DELETE',
-        path => "$prefix${\($self->path)}/$target"
+        path => $prefix || '' . $self->path . "/$target"
     );
     if ($res->is_success) {
         $self->_exec_on_success($args{on_success}, $res, $self);

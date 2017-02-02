@@ -19,7 +19,7 @@ sub update {
     }
     my $res = $self->ua->request(
         type => 'PATCH',
-        path => "$prefix${\($self->path)}/$target",
+        path => $prefix || '' . $self->path . "/$target",
         data => \%new_attr,
     );
     if ($res->is_success) {
