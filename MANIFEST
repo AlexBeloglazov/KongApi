@@ -1,0 +1,17 @@
+lib/KongApi.pm
+lib/KongApi/Response.pm
+lib/KongApi/UserAgent.pm
+lib/KongApi/Roles/Deletable.pm
+lib/KongApi/Roles/Addable.pm
+lib/KongApi/Roles/AddUpdatable.pm
+lib/KongApi/Roles/Callback.pm
+lib/KongApi/Roles/Updatable.pm
+lib/KongApi/Objects/Consumer.pm
+lib/KongApi/Objects/Plugin.pm
+lib/KongApi/Objects/API.pm
+lib/KongApi/Factory.pm
+LICENSE
+Makefile.PL
+MANIFEST
+README
+t/KongApi.t
