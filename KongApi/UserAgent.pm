@@ -19,7 +19,6 @@ sub BUILDARGS {
 sub request {
     my ($self, %args) = @_;
     croak 'Unspecified type of the request' unless defined $args{type};
-    # print $args{path}."\n";
     $self->server->path($args{path});
     $self->server->query_form($args{querystring}) if exists $args{querystring};
     my $req = HTTP::Request->new($args{type}, $self->server->canonical);
