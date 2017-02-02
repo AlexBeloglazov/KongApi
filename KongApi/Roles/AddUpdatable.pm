@@ -7,14 +7,19 @@ use KongApi::Helpers;
 
 sub add_update {
     my ($self, %args) = (shift, @_);
-    my (%req_body, $val);
+    my (%req_body, $prefix);
     foreach ($self->attr) {
-		$val = $args{$_} || $self->{$_};
-        $req_body{$_} = $val if defined $val;
+        $req_body{$_} = $self->$_ if $self->$_;
+    }
+    if ($self->isa('KongApi::Objects::Plugin')) {
+        croak 'conflicting api_id and api_name' if $self->api_id and (exists $args{api_id} or exists $args{api_name});
+        croak 'define either api_id or api_name' if exists $args{api_id} and exists $args{api_name};
+        my $nameOrId = $self->api_id || $args{api_id} || $args{api_name};
+        $prefix = ($nameOrId) ? "apis\/$nameOrId\/" : '';
     }
     my $res = $self->ua->request(
         type => 'PUT',
-        path => $self->path,
+        path => $prefix . $self->path,
         data => \%req_body,
     );
     if ($res->is_success) {

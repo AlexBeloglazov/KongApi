@@ -28,10 +28,11 @@ sub build {
 
 sub find {
     my ($self, %args) = (shift, @_);
-    my ($on_success, $on_error) = (delete $args{on_success}, delete $args{on_error});
+    my ($on_success, $on_error, $api_name) = (delete $args{on_success}, delete $args{on_error}, delete $args{api_name});
+    my $path = (defined $api_name) ? do {delete $args{api_id}; "apis\/$api_name\/".lc $self->type.'s'} : lc $self->type.'s';
     my $res = $self->ua->request(
         type => 'GET',
-        path => lc $self->type.'s',
+        path => $path,
         querystring => \%args
     );
     my $data = [map { ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %$_) } @{$res->data->{data}}];
@@ -41,7 +42,8 @@ sub find {
 
 sub findOne {
     my ($self, %args) = (shift, @_);
-    my $target = $args{id} || $args{name} || $args{username} || croak "Required parameter: id, name or username";
+    my $target = ($self->type eq 'Plugin') ? ($args{id} || croak 'Required parameter: id') :
+        ($args{id} || $args{name} || $args{username} || croak "Required parameter: id, name or username");
     my ($on_success, $on_error) = (delete $args{on_success}, delete $args{on_error});
     my $res = $self->ua->request(
         type => 'GET',

@@ -1,0 +1,41 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BUILDARGS	KongApi.pm	/^sub BUILDARGS {$/;"	s
+BUILDARGS	KongApi/UserAgent.pm	/^sub BUILDARGS {$/;"	s
+KongApi	KongApi.pm	/^package KongApi;$/;"	p
+KongApi::Factory	KongApi/Factory.pm	/^package KongApi::Factory;$/;"	p
+KongApi::Helpers	KongApi/Helpers.pm	/^package KongApi::Helpers;$/;"	p
+KongApi::Objects::Api	KongApi/Objects/API.pm	/^package KongApi::Objects::Api;$/;"	p
+KongApi::Objects::Consumer	KongApi/Objects/Consumer.pm	/^package KongApi::Objects::Consumer;$/;"	p
+KongApi::Objects::Plugin	KongApi/Objects/Plugin.pm	/^package KongApi::Objects::Plugin;$/;"	p
+KongApi::Response	KongApi/Response.pm	/^package KongApi::Response;$/;"	p
+KongApi::Roles::AddUpdatable	KongApi/Roles/AddUpdatable.pm	/^package KongApi::Roles::AddUpdatable;$/;"	p
+KongApi::Roles::Addable	KongApi/Roles/Addable.pm	/^package KongApi::Roles::Addable;$/;"	p
+KongApi::Roles::Deletable	KongApi/Roles/Deletable.pm	/^package KongApi::Roles::Deletable;$/;"	p
+KongApi::Roles::Updatable	KongApi/Roles/Updatable.pm	/^package KongApi::Roles::Updatable;$/;"	p
+KongApi::UserAgent	KongApi/UserAgent.pm	/^package KongApi::UserAgent;$/;"	p
+add	KongApi/Roles/Addable.pm	/^sub add {$/;"	s
+add_update	KongApi/Roles/AddUpdatable.pm	/^sub add_update {$/;"	s
+args_check	KongApi/Helpers.pm	/^sub args_check {$/;"	s
+attr	KongApi/Objects/API.pm	/^use constant attr => qw(name request_host request_path strip_request_path preserve_host upstream_url created_at id);$/;"	c
+attr	KongApi/Objects/Consumer.pm	/^use constant attr => qw(username created_at id custom_id);$/;"	c
+attr	KongApi/Objects/Plugin.pm	/^use constant attr => qw(name created_at config enabled consumer_id api_id id);$/;"	c
+build	KongApi/Factory.pm	/^sub build {$/;"	s
+delete	KongApi/Roles/Deletable.pm	/^sub delete {$/;"	s
+disable	KongApi/Objects/Plugin.pm	/^sub disable {$/;"	s
+enable	KongApi/Objects/Plugin.pm	/^sub enable {$/;"	s
+exec_callback	KongApi/Helpers.pm	/^sub exec_callback {$/;"	s
+find	KongApi/Factory.pm	/^sub find {$/;"	s
+findOne	KongApi/Factory.pm	/^sub findOne {$/;"	s
+path	KongApi/Objects/API.pm	/^use constant path => 'apis';$/;"	c
+path	KongApi/Objects/Consumer.pm	/^use constant path => 'consumers';$/;"	c
+path	KongApi/Objects/Plugin.pm	/^use constant path => 'plugins';$/;"	c
+request	KongApi/UserAgent.pm	/^sub request {$/;"	s
+updatable	KongApi/Objects/API.pm	/^use constant updatable => qw(name request_host request_path strip_request_path preserve_host upstream_url);$/;"	c
+updatable	KongApi/Objects/Consumer.pm	/^use constant updatable => qw(username custom_id);$/;"	c
+updatable	KongApi/Objects/Plugin.pm	/^use constant updatable => qw(name config enabled consumer_id);$/;"	c
+update	KongApi/Roles/Updatable.pm	/^sub update {$/;"	s
