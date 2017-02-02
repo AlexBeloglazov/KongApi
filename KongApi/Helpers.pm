@@ -1,6 +1,6 @@
 package KongApi::Helpers;
 
-use Carp qw(croak confess);
+use Carp qw(confess);
 use parent ("Exporter");
 
 our @EXPORT = ("exec_callback", "args_check");

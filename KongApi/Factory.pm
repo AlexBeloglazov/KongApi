@@ -1,10 +1,10 @@
 package KongApi::Factory;
 
 use Moo;
+with ('KongApi::Roles::Callback');
 use KongApi::Objects::API;
 use KongApi::Objects::Plugin;
 use KongApi::Objects::Consumer;
-use KongApi::Helpers;
 use Carp qw(croak);
 
 has [qw (type ua)] => (is => 'ro');
@@ -36,7 +36,12 @@ sub find {
         querystring => \%args
     );
     my $data = [map { ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %$_) } @{$res->data->{data}}];
-    exec_callback($on_success, $on_error, $res, $data);
+    if ($res->is_success) {
+        $self->_exec_on_success($on_success, $res, $data);
+    }
+    else {
+        $self->_exec_on_error($on_error, $res, $data)
+    }
     return $data;
 }
 
@@ -50,8 +55,12 @@ sub findOne {
         path => lc $self->type."s\/$target"
     );
     my $data = ('KongApi::Objects::'.$self->type)->new(ua => $self->ua, %{$res->data});
-    exec_callback($on_success, $on_error, $res, $data);
-    return ($res->is_success) ? $data : undef;
+    if ($res->is_success) {
+        $self->_exec_on_success($on_success, $res, $data);
+        return $data;
+    }
+    $self->_exec_on_error($on_error, $res, $data);
+    return undef;
 }
 
 1;

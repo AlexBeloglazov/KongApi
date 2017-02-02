@@ -1,11 +1,10 @@
 package KongApi::Objects::Plugin;
 
 use Moo;
-with map {'KongApi::Roles::'.$_} qw(Addable Deletable Updatable AddUpdatable);
+with map {'KongApi::Roles::'.$_} qw(Addable Deletable Updatable AddUpdatable Callback);
 
 use constant path => 'plugins';
-use constant attr => qw(name created_at config enabled consumer_id api_id id);
-use constant updatable => qw(name config enabled consumer_id);
+use constant attr => qw(name created_at config enabled consumer_id api_id api_name id);
 
 has [ attr ] => (is => 'rw');
 has 'ua' => (is => 'ro');

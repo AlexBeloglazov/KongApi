@@ -1,11 +1,10 @@
 package KongApi::Objects::Consumer;
 
 use Moo;
-with map {'KongApi::Roles::'.$_} qw(Addable Deletable Updatable AddUpdatable);
+with map {'KongApi::Roles::'.$_} qw(Addable Deletable Updatable AddUpdatable Callback);
 
 use constant path => 'consumers';
 use constant attr => qw(username created_at id custom_id);
-use constant updatable => qw(username custom_id);
 
 has [ attr ] => (is => 'rw');
 has 'ua' => (is => 'ro');
