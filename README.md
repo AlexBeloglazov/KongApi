@@ -91,11 +91,12 @@ Supported for mutation attributes can be changed and saved back to the server.
 Examples of usage:
 
 1. Create a new Consumer object without saving it to the server:
+
 	```perl
-   	my $new_consumer = $kong->consumer->new();
-	# also you can set corresponding attributes through constructor
-	my $new_consumer = $kong->consumer->new(username => 'John');
-	```
+   my $new_consumer = $kong->consumer->new();
+   # also you can set corresponding attributes through constructor
+   my $new_consumer = $kong->consumer->new(username => 'John');
+   ```
 2. Add Consumer to the server:
 	```perl
     my $saved_consumer = $new_consumer->save;
