@@ -28,7 +28,7 @@ Examples:
     
     my $consumers = $kong->consumer->find(size => 10);
     
-    # now $consumers is an anonymous list of size <= 10 of KongApi::Objects::Consumer objects
+    # now $consumers is an anonymous array of size <= 10 of KongApi::Objects::Consumer objects
     ```
 
 4. Searching for APIs:
@@ -42,7 +42,7 @@ Examples:
     
     my $apis = $kong->api->find(size => 10);
     
-    # now $apis is an anonymous list of size <= 10 of KongApi::Objects::Api objects
+    # now $apis is an anonymous array of size <= 10 of KongApi::Objects::Api objects
     ```
     Note: You also can pass to the *find()* method any of Request Querystring Parameters mentioned in Kong Admin API Documentation.
 
@@ -54,7 +54,7 @@ Examples:
     
     my $plugins = $kong->plugin->find(size => 10);
     
-    # now $plugins is an anonymous list of size <= 10 of KongApi::Objects::Plugin objects
+    # now $plugins is an anonymous array of size <= 10 of KongApi::Objects::Plugin objects
     ```
     Note: You also can pass to the *find()* method any of Request Querystring Parameters mentioned in Kong Admin API Documentation.
 
@@ -68,7 +68,7 @@ Methods *find()* and *findOne()* support passing optional arguments:
       say "Found consumer's id: " . $found_consumer->id;
    });
    ```
-   - on_error - reference to a subroutine that will be executed if an error occured. KongApi::Response onject is passed to the subroutine as an argument.
+   - on_error - reference to a subroutine that will be executed if an error occured. KongApi::Response object is passed to the subroutine as an argument.
    
    ```perl
    $kong->consumer->find(on_error => sub {
@@ -99,11 +99,11 @@ Examples of usage:
    ```
 2. Add Consumer to the server:
 	```perl
-    my $saved_consumer = $new_consumer->save;
+    my $saved_consumer = $new_consumer->add;
     # or you can do everything in one line
-    my $saved_consumer = $kong->consumer->new(username => 'John')->save;
+    my $saved_consumer = $kong->consumer->new(username => 'John')->add;
     ```
-    Method *save()* returns KongApi::Objects::Consumer object if the consumer has been added successfully, otherwise it returns *undef*.
+    Method *add()* returns KongApi::Objects::Consumer object if the consumer has been added successfully, otherwise it returns *undef*.
    
 3. Update a name of consumer:
 	```perl
@@ -121,7 +121,7 @@ Examples of usage:
     }
     ```
 
-Optional arguments for *save()*, *delete()*, *update()*, *add_update()* methods:
+Optional arguments for *add()*, *delete()*, *update()*, *add_update()* methods:
 - on_success => sub {}
 - on_error => sub {}
 
