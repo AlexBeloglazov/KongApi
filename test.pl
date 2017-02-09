@@ -13,14 +13,19 @@ my $k = KongApi->new(server => 'http://127.0.0.1:8001', ua_timeout => 5);
 
 # print Dumper $k->api->new(name => 'mockbin', upstream_url => 'http://mockbin.com/', request_host => 'mockbin.com')->update;
 
+my $tr = {data => [1,2,4]};
 
-foreach (@{$k->consumer->find}) {
-    print Dumper $_->delete;
+foreach my $i (0 .. @{$tr->{data}}-1) {
+	print $i;
 }
+
+# foreach (@{$k->consumer->find}) {
+#     print Dumper $_->delete;
+# }
 
 # print Dumper $k->plugin->findOne(id => '2ea2465b-744e-4a73-9918-98b687aafa78')->delete(on_error => sub {print Dumper shift->data});
 
-print Dumper $k->consumer->new(username => 'Alexander')->add;
+# print Dumper $k->consumer->new(username => 'Alexander')->add;
 
 # print "${\($k->api->type)}";
 
