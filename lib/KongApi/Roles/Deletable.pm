@@ -12,11 +12,11 @@ sub delete {
         $prefix = ($nameOrId) ? "apis\/$nameOrId\/" : '';
     }
     else {
-        $target = $self->id || $self->name || $self->username || croak 'name or id must be defined';
+        $target = $self->id || croak 'id must be defined';
     }
     my $res = $self->ua->request(
         type => 'DELETE',
-        path => $prefix || '' . $self->path . "/$target"
+        path => ($prefix || '' ) . $self->path . "/$target"
     );
     if ($res->is_success) {
         $self->_exec_on_success($args{on_success}, $res, $self);

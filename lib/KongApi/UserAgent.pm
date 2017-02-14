@@ -27,7 +27,6 @@ sub request {
         $req->content(encode_json $args{data});
     }
     my $res = $self->ua->request($req);
-    print $res->decoded_content;
     my $json = eval { decode_json($res->decoded_content || '{}') };
     return KongApi::Response->new({
         code => $res->code,

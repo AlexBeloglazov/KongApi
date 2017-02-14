@@ -15,7 +15,7 @@ sub add {
     }
     my $res = $self->ua->request(
         type => 'POST',
-        path => $prefix || '' . $self->path,
+        path => ($prefix || '') . $self->path,
         data => \%req_body,
     );
     if ($res->is_success) {

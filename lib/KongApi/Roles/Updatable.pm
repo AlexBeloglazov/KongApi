@@ -15,11 +15,11 @@ sub update {
         $prefix = ($nameOrId) ? "apis\/$nameOrId\/" : '';
     }
     else {
-        $target = $self->id || $self->name || $self->username || croak 'name or id must be defined';
+        $target = $self->id || croak 'id must be defined';
     }
     my $res = $self->ua->request(
         type => 'PATCH',
-        path => $prefix || '' . $self->path . "/$target",
+        path => ($prefix || '') . $self->path . "/$target",
         data => \%new_attr,
     );
     if ($res->is_success) {
