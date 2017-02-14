@@ -13,5 +13,10 @@ lib/KongApi/Factory.pm
 LICENSE
 Makefile.PL
 MANIFEST
-README
-t/KongApi.t
+README.md
+t/04_plugin.t
+t/01_kongapi.t
+t/05_consumer.t
+t/03_useragent.t
+t/02_factory.t
+test.pl
