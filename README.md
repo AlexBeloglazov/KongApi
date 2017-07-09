@@ -1,6 +1,8 @@
 KongApi v. 0.1
 -
 
+Perl wrapper over Kong Admin API
+
 ### Usage
 
 #### KongApi
